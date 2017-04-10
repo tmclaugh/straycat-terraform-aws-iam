@@ -30,7 +30,7 @@ module "aws_iam_group_root_admin" {
 }
 
 # FIXME: Once I can do depends_on with modules this becomes unnecessary.
-resource "aws_iam_group_membership" "members" {
+resource "aws_iam_group_membership" "root" {
   name = "${var.root_admin_name}-membership"
   group = "${var.root_admin_name}"
   users = "${var.root_admin_members}"
@@ -48,9 +48,13 @@ output "aws_iam_group_name_root_admin" {
 }
 
 output "aws_iam_group_membership_users_root_admin" {
-  value = ["${aws_iam_group_membership.members.users}"]
+  value = ["${aws_iam_group_membership.root.users}"]
 }
 
-output "aws_iam_group_policies_root_admin" {
-  value = "${sort(module.aws_iam_group_root_admin.aws_iam_group_policy)}"
+output "aws_iam_group_inline_policies_root_admin" {
+  value = "${sort(module.aws_iam_group_root_admin.aws_iam_group_inline_policy)}"
+}
+
+output "aws_iam_group_managed_policies_root_admin" {
+  value = "${sort(module.aws_iam_group_root_admin.aws_iam_group_managed_policy)}"
 }
